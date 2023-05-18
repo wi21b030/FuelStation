@@ -19,7 +19,7 @@ public class InvoiceService {
 
     public List<String> getInvoice(int customerID) {
         List<String> invoiceInfo = new ArrayList<>();
-        String fileStoragePath = "..\\..\\..\\..\\..\\..\\..\\FileStorage\\";
+        String fileStoragePath = ".\\Backend\\FileStorage\\";
         String filePath = fileStoragePath + customerID + ".txt";
         Path path = Paths.get(filePath);
         if (Files.exists(path) && Files.isRegularFile(path)) {

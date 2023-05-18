@@ -28,7 +28,9 @@ public class InvoiceController {
     @GetMapping("/invoices/{customerID}")
     public ResponseEntity<List<String>> gatherInvoice(@PathVariable String customerID) {
         List<String> invoiceInfo = invSer.getInvoice(Integer.parseInt(customerID));
-        if (!invoiceInfo.isEmpty()) return new ResponseEntity<>(invoiceInfo, HttpStatus.OK);
+        if (!invoiceInfo.isEmpty()) {
+            return new ResponseEntity<>(invoiceInfo, HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
