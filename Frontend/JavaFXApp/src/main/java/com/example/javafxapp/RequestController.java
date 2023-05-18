@@ -7,12 +7,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.URI;
+import java.util.regex.Pattern;
 
 
 public class RequestController {
@@ -25,7 +24,7 @@ public class RequestController {
     @FXML
     private TextField customerIdField2;
     @FXML
-    private Label response;
+    private Label invoiceInfo;
     @FXML
     private TextArea responseCreationInvoice;
 
@@ -50,15 +49,15 @@ public class RequestController {
             try {
                 client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                         .thenApply(HttpResponse::body)
-                        .thenAccept(body -> Platform.runLater(() -> response.setText(body)))
+                        .thenAccept(body -> Platform.runLater(() -> invoiceInfo.setText(body)))
                         .join();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (id.isEmpty()) {
-            response.setText("The field is empty");
+            invoiceInfo.setText("The field is empty");
         } else {
-            response.setText("The field should only contain numbers");
+            invoiceInfo.setText("The field should only contain numbers");
         }
     }
 
@@ -72,15 +71,24 @@ public class RequestController {
                     .build();
 
             try {
-                client.sendAsync(getRequest, HttpResponse.BodyHandlers.ofString())
-                        .thenApply(HttpResponse::body)
-                        .thenAccept(body -> Platform.runLater(() -> responseCreationInvoice.setText(body)))
-                        .join();
-                responseCreationInvoice.setVisible(true);
+                HttpResponse<String> response = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
 
+                int statusCode = response.statusCode();
+                if (statusCode >= 200 && statusCode < 300) {
+                    String responseBody = response.body();
+                    Platform.runLater(() -> responseCreationInvoice.setText(responseBody));
+                    responseCreationInvoice.setVisible(true);
+                } else {
+                    System.err.println();
+                    responseCreationInvoice.setText("HTTP Error: " + statusCode);
+                    responseCreationInvoice.setVisible(true);
+
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+
         } else if (id.isEmpty()) {
             responseCreationInvoice.setText("The field is empty");
             responseCreationInvoice.setVisible(true);

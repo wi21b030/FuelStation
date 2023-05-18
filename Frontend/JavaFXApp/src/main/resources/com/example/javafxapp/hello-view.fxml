@@ -17,7 +17,7 @@
                 <Button fx:id="gatherDataButton" layoutX="198.0" layoutY="74.0" mnemonicParsing="false" text="Gather Data" />
                 <Label layoutX="32.0" layoutY="139.0" text="Customer ID:" />
                 <TextField fx:id="customerIdField2" layoutX="32.0" layoutY="164.0" />
-                <Label fx:id="response" disable="true" layoutX="32.0" layoutY="106.0" prefHeight="25.0" prefWidth="366.0" text="" />
+                <Label fx:id="invoiceInfo" disable="true" layoutX="32.0" layoutY="106.0" prefHeight="25.0" prefWidth="366.0" text="" />
                 <TextArea fx:id="responseCreationInvoice" disable="true" layoutX="32.0" layoutY="203.0" prefHeight="69.0" prefWidth="366.0" visible="false" />
             </children>
         </Pane>
