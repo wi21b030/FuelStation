@@ -16,7 +16,7 @@ public class InvoiceService {
     }
 
     public List<String> getInvoice(int customerID) {
-        List<String> invoiceInfo = new ArrayList<String>();
+        List<String> invoiceInfo = new ArrayList<>();
         invoiceInfo.add(fileStoragePath+"1.txt");
         invoiceInfo.add("18.05.23");
         return invoiceInfo;
