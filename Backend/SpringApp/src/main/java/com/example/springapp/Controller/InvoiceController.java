@@ -22,7 +22,7 @@ public class InvoiceController {
     public ResponseEntity<String> gatherData(@PathVariable String customerID) {
         boolean requestSent = invSer.createInvoice(Integer.parseInt(customerID));
         if (requestSent) return new ResponseEntity<>("Request to gather data sent!", HttpStatus.OK);
-        return new ResponseEntity<>("Request to gather data could not be sent!", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Request to gather data could not be sent!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/invoices/{customerID}")
