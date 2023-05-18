@@ -4,7 +4,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -23,7 +25,7 @@ public class RequestController {
     @FXML
     private Label response;
     @FXML
-    private Label responseCreationInvoice;
+    private TextArea responseCreationInvoice;
 
 
     @FXML
@@ -32,11 +34,12 @@ public class RequestController {
         downloadInvoiceButton.setOnAction(event -> downloadInvoice(customerIdField2.getText()));
 
     }
+
     @FXML
     private void gatherData(String id) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(String.format("http://localhost:8080/invoices/%s",id)))
+                .uri(URI.create(String.format("http://localhost:8080/invoices/%s", id)))
                 .POST(HttpRequest.BodyPublishers.ofString(id))
                 .build();
 
@@ -45,12 +48,12 @@ public class RequestController {
                     .thenApply(HttpResponse::body)
                     .thenAccept(body -> Platform.runLater(() -> response.setText(body)))
                     .join();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
     private void downloadInvoice(String id) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest getRequest = HttpRequest.newBuilder()

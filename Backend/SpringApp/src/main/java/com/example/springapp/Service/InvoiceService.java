@@ -19,24 +19,20 @@ public class InvoiceService {
     private final String fileStoragePath = "..\\..\\..\\..\\..\\..\\..\\FileStorage\\";
 
     public boolean createInvoice(int customerID) {
-        boolean requestSent = false;
+        boolean requestSent = true;
         // Queue Logic
         return requestSent;
     }
 
     public List<String> getInvoice(int customerID) {
         List<String> invoiceInfo = new ArrayList<>();
-        Path filePath = Path.of(fileStoragePath + "1.txt");
-        BasicFileAttributes fileAttributes = null;
-        try {
-            fileAttributes = Files.readAttributes(filePath, BasicFileAttributes.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        FileTime creationTime = fileAttributes.creationTime();
-        LocalDateTime creationDateTime = LocalDateTime.ofInstant(creationTime.toInstant(), ZoneId.systemDefault());
-        invoiceInfo.add(fileStoragePath + "1.txt");
-        invoiceInfo.add(String.valueOf(creationDateTime));
+        /*File[] files = new File(fileStoragePath).listFiles();
+        for (File file : files) {
+            if (file.getName().equals(customerID)) {
+                invoiceInfo.add(file.getName());
+            }
+        }*/
+        invoiceInfo.add(fileStoragePath+"1.txt");
         return invoiceInfo;
     }
 }
