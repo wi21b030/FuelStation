@@ -7,6 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -37,37 +39,56 @@ public class RequestController {
 
     @FXML
     private void gatherData(String id) {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(String.format("http://localhost:8080/invoices/%s", id)))
-                .POST(HttpRequest.BodyPublishers.ofString(id))
-                .build();
+        if (!id.isEmpty() && Pattern.matches("^[0-9]+$", id)) {
 
-        try {
-            client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body)
-                    .thenAccept(body -> Platform.runLater(() -> response.setText(body)))
-                    .join();
-        } catch (Exception e) {
-            e.printStackTrace();
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(String.format("http://localhost:8080/invoices/%s", id)))
+                    .POST(HttpRequest.BodyPublishers.ofString(id))
+                    .build();
+
+            try {
+                client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                        .thenApply(HttpResponse::body)
+                        .thenAccept(body -> Platform.runLater(() -> response.setText(body)))
+                        .join();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id.isEmpty()) {
+            response.setText("The field is empty");
+        } else {
+            response.setText("The field should only contain numbers");
         }
-
     }
 
     private void downloadInvoice(String id) {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest getRequest = HttpRequest.newBuilder()
-                .uri(URI.create(String.format("http://localhost:8080/invoices/%s", id)))
-                .GET()
-                .build();
+        if (!id.isEmpty() && Pattern.matches("^[0-9]+$", id)) {
 
-        try {
-            client.sendAsync(getRequest, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body)
-                    .thenAccept(body -> Platform.runLater(() -> responseCreationInvoice.setText(body)))
-                    .join();
-        } catch (Exception e) {
-            e.printStackTrace();
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest getRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(String.format("http://localhost:8080/invoices/%s", id)))
+                    .GET()
+                    .build();
+
+            try {
+                client.sendAsync(getRequest, HttpResponse.BodyHandlers.ofString())
+                        .thenApply(HttpResponse::body)
+                        .thenAccept(body -> Platform.runLater(() -> responseCreationInvoice.setText(body)))
+                        .join();
+                responseCreationInvoice.setVisible(true);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id.isEmpty()) {
+            responseCreationInvoice.setText("The field is empty");
+            responseCreationInvoice.setVisible(true);
+
+        } else {
+            responseCreationInvoice.setText("The field should only contain numbers");
+            responseCreationInvoice.setVisible(true);
+
         }
     }
 }
