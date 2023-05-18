@@ -1,0 +1,29 @@
+package org.example;
+
+import com.rabbitmq.client.ConnectionFactory;
+import org.example.Service.Database;
+import org.example.Service.Queue;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeoutException;
+
+public class DataCollectionDispatcher {
+
+    private final Database database;
+    private final Queue queue;
+
+
+    public DataCollectionDispatcher(Database database, Queue queue) {
+        this.database = database;
+        this.queue = queue;
+    }
+
+    public List<Station> getDatabase() {
+        return Database.select();
+    }
+
+    public void wait(List<Station> stations, ConnectionFactory factory) throws IOException, TimeoutException {
+        this.queue.receive(stations, factory);
+    }
+}
