@@ -10,6 +10,7 @@ public class PDFGenerator {
 
 
         PDDocument document = new PDDocument();
+
         PDPage firstPage = new PDPage();
         document.addPage(firstPage);
         try {
