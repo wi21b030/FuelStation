@@ -78,6 +78,8 @@ public class RequestController {
                     String responseBody = response.body();
                     Platform.runLater(() -> responseCreationInvoice.setText(responseBody));
                     responseCreationInvoice.setVisible(true);
+
+
                 } else {
                     System.err.println();
                     responseCreationInvoice.setText("HTTP Error: " + statusCode);
@@ -87,7 +89,6 @@ public class RequestController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
 
         } else if (id.isEmpty()) {
             responseCreationInvoice.setText("The field is empty");
