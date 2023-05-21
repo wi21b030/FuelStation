@@ -23,7 +23,7 @@ public class DataCollectionDispatcher {
         return Database.select();
     }
 
-    public void wait(List<Station> stations, ConnectionFactory factory) throws IOException, TimeoutException {
-        this.queue.receive(stations, factory);
+    public void wait(List<Station> stations) throws IOException, TimeoutException {
+        this.queue.receive(stations);
     }
 }
