@@ -16,7 +16,6 @@ public class Main {
         DataCollectionDispatcher dcd = new DataCollectionDispatcher(db, queue);
 
         List<Station> stations = dcd.getDatabase();
-        ConnectionFactory factory = new ConnectionFactory();
-        dcd.wait(stations, factory);
+        dcd.wait(stations);
     }
 }

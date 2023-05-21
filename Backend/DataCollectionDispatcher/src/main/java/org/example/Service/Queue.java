@@ -19,11 +19,12 @@ public class Queue {
     private final static String PRODUCE2 = "DCD_DCR";
     private final static String HOST = "localhost";
     private final static int PORT1 = 30003;
-    private final static int PORT2 = 30083;
+    //private final static int PORT2 = 30083;
 
     private int id;
 
-    public void receive(List<Station> stations, ConnectionFactory factory) throws IOException, TimeoutException {
+    public void receive(List<Station> stations) throws IOException, TimeoutException {
+        ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(HOST);
         factory.setPort(PORT1);
 
@@ -49,41 +50,41 @@ public class Queue {
     }
 
     private void send(List<Station> stations) throws IOException, TimeoutException {
-        ConnectionFactory factory2 = new ConnectionFactory();
-        factory2.setHost(HOST);
-        factory2.setPort(PORT1);
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(HOST);
+        factory.setPort(PORT1);
+
+        int i = 0;
         try (
-                Connection connection = factory2.newConnection();
+                Connection connection = factory.newConnection();
                 Channel channel = connection.createChannel()
         ) {
             channel.queueDeclare(PRODUCE1, false, false, false, null);
-
-            int i = 0;
             for (Station s : stations) {
                 String message = "db_url=" + s.getUrl() + "&id=" + this.id;
                 channel.basicPublish("", PRODUCE1, null, message.getBytes(StandardCharsets.UTF_8));
                 
                 //channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
-                System.out.println(" [x] Sent '" + this.id + "'");
                 i++;
+                System.out.println(" [" + i + "] sent '" + this.id + "' to Station Data Collector");
             }
-
-            inform(i);
         }
+        inform(i);
     }
 
     private static void inform(int i) throws IOException, TimeoutException {
-        ConnectionFactory factory3 = new ConnectionFactory();
-        factory3.setHost(HOST);
-        factory3.setPort(PORT2);
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(HOST);
+        factory.setPort(PORT1);
         try (
-                Connection connection = factory3.newConnection();
+                Connection connection = factory.newConnection();
                 Channel channel = connection.createChannel()
         ) {
             channel.queueDeclare(PRODUCE2, false, false, false, null);
 
             String length = String.valueOf(i);
             channel.basicPublish("", PRODUCE2, null, length.getBytes(StandardCharsets.UTF_8));
+            System.out.println(" [x" + i + "] informed Data Collection Receiver");
         }
     }
 }
