@@ -1,6 +1,6 @@
 package org.example.Service;
 
-import org.example.Station;
+import org.example.Data.Station;
 
 import java.sql.*;
 import java.util.ArrayList;
