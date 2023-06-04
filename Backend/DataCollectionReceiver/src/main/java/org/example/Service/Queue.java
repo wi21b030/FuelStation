@@ -23,11 +23,15 @@ public class Queue {
 
     private int expectedMessages;
 
-    public void consumeExpectedMessages() throws IOException, TimeoutException {
-        ConnectionFactory factory = new ConnectionFactory();
+    private static ConnectionFactory factory;
+
+    public Queue() {
+        factory = new ConnectionFactory();
         factory.setHost(HOST);
         factory.setPort(PORT);
+    }
 
+    public void consumeExpectedMessages() throws IOException, TimeoutException {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
@@ -65,10 +69,6 @@ public class Queue {
     }
 
     public void consumeActualMessages() throws IOException, TimeoutException {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(HOST);
-        factory.setPort(PORT);
-
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
@@ -82,12 +82,13 @@ public class Queue {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             System.out.println(" [x] Received from StationDataCollector: '" + message + "' " + LocalTime.now());
             receivedMessages.add(message);
-
             // Check if the number of received messages from CONSUME2 matches the expected number
             if (receivedMessages.size() == this.expectedMessages) {
                 String customerTotal = calculateTotal(receivedMessages);
                 try {
                     send(customerTotal);
+                    this.expectedMessages = 0;
+                    receivedMessages.clear();
                 } catch (TimeoutException e) {
                     throw new RuntimeException(e);
                 }
@@ -99,35 +100,15 @@ public class Queue {
     }
 
     private void send(String customerData) throws IOException, TimeoutException {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(HOST);
-        factory.setPort(PORT);
-        String customerID = extractIdFromMessage(customerData);
-        int customerKWH = extractTotalKWHFromCustomerData(customerData);
+        System.out.println("Sending....");
         try (
                 Connection connection = factory.newConnection();
                 Channel channel = connection.createChannel()
         ) {
+            System.out.println("Publishing" + customerData);
             channel.queueDeclare(PRODUCE, false, false, false, null);
-
             channel.basicPublish("", PRODUCE, null, customerData.getBytes(StandardCharsets.UTF_8));
-            System.out.println(" [" + customerID + "] sent '" + customerKWH + "' to PDFGenerator");
-        }
-        inform(customerData);
-    }
-
-    private void inform(String customerData) throws IOException, TimeoutException {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(HOST);
-        factory.setPort(PORT);
-        String id = extractIdFromMessage(customerData);
-        try (
-                Connection connection = factory.newConnection();
-                Channel channel = connection.createChannel()
-        ) {
-            channel.queueDeclare(PRODUCE, false, false, false, null);
-            channel.basicPublish("", PRODUCE, null, id.getBytes(StandardCharsets.UTF_8));
-            System.out.println(" [x" + id + "] informed PDFGenerator");
+            System.out.println(" [" + this.id + "] sent '" + customerData + "' to PDFGenerator");
         }
     }
 
@@ -154,8 +135,9 @@ public class Queue {
     }
 
     private String calculateTotal(List<String> receivedMessages) {
-        int totalKWH = 0;
+        float totalKWH = 0;
         String id = null;
+        System.out.println("receivedMessages " + receivedMessages);
         for (String message : receivedMessages) {
             String[] keyValuePairs = message.split("&");
             for (String keyValuePair : keyValuePairs) {
@@ -166,13 +148,14 @@ public class Queue {
                     if (key.equals("id")) {
                         id = value;
                     } else if (key.equals("kwh")) {
-                        int kwh = Integer.parseInt(value);
-                        totalKWH += kwh;
+                        String cleanedValue = value.replaceAll(",", "."); // Remove commas
+                        System.out.println(cleanedValue);
+                        totalKWH += Float.valueOf(cleanedValue);
+                        System.out.println(totalKWH);
                     }
                 }
             }
         }
-
         if (id != null) {
             return "id=" + id + "&totalKWH=" + totalKWH;
         }
