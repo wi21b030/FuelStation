@@ -2,10 +2,10 @@ package org.example.Data;
 
 public class Station {
 
-    private static int id = 0;
-    private static String db_url = null;
-    private static float lat;
-    private static float lng;
+    private int id = 0;
+    private String db_url = null;
+    private float lat;
+    private float lng;
 
 
     public Station(int id, String db_url, float lat, float lng) {
