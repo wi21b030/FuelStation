@@ -71,16 +71,16 @@ public class Queue {
         inform(i);
     }
 
-    private static void inform(int i) throws IOException, TimeoutException {
+    private void inform(int i) throws IOException, TimeoutException {
         try (
                 Connection connection = factory.newConnection();
                 Channel channel = connection.createChannel()
         ) {
             channel.queueDeclare(PRODUCE2, false, false, false, null);
 
-            String length = String.valueOf(i);
-            channel.basicPublish("", PRODUCE2, null, length.getBytes(StandardCharsets.UTF_8));
-            System.out.println(" [x" + i + "] informed Data Collection Receiver");
+            String message = "count=" + i + "&id=" + this.id;
+            channel.basicPublish("", PRODUCE2, null, message.getBytes(StandardCharsets.UTF_8));
+            System.out.println(" [x" + i + "] informed Data Collection Receiver about ID " + id);
         }
     }
 }
