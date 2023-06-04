@@ -42,7 +42,7 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   queue:
-    image: rabbitmq:alpine
+    image: rabbitmq:management-alpine
     ports:
       - '30003:5672'
       - '30083:15672'
