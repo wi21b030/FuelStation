@@ -85,21 +85,11 @@ public class Queue {
 
             // Check if the number of received messages from CONSUME2 matches the expected number
             if (receivedMessages.size() == this.expectedMessages) {
-                // Extract the id from the first message
-                String firstMessageId = extractIdFromMessage(receivedMessages.get(0));
-
-                // Check if all the messages have the same id
-                boolean allMessagesHaveSameId = receivedMessages.stream()
-                        .map(this::extractIdFromMessage)
-                        .allMatch(id -> id.equals(firstMessageId));
-
-                if (allMessagesHaveSameId && firstMessageId.equals(String.valueOf(this.id))) {
-                    String customerTotal = calculateTotal(receivedMessages);
-                    try {
-                        send(customerTotal);
-                    } catch (TimeoutException e) {
-                        throw new RuntimeException(e);
-                    }
+                String customerTotal = calculateTotal(receivedMessages);
+                try {
+                    send(customerTotal);
+                } catch (TimeoutException e) {
+                    throw new RuntimeException(e);
                 }
             }
         };
