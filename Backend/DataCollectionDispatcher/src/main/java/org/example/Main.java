@@ -1,6 +1,6 @@
 package org.example;
 
-import com.rabbitmq.client.ConnectionFactory;
+import org.example.Data.Station;
 import org.example.Service.Database;
 import org.example.Service.Queue;
 
