@@ -29,15 +29,17 @@ public class Database {
             try (
                     ResultSet rs = ps.executeQuery()
             ) {
-                int id = rs.getInt("id");
-                String firstName = rs.getString("first_name");
-                String lastName = rs.getString("last_name");
+                while(rs.next()) {
+                    int id = rs.getInt("id");
+                    String firstName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
 
-                if(id != 0 && !firstName.isEmpty() && !lastName.isEmpty() ) {
-                    customer = new Customer(id, firstName, lastName);
+                    if (id != 0 && !firstName.isEmpty() && !lastName.isEmpty()) {
+                        customer = new Customer(id, firstName, lastName);
+                    }
+
+                    System.out.printf(customer.toString());
                 }
-
-                System.out.printf(customer.toString());
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
