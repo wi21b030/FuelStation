@@ -1,20 +1,23 @@
 package com.example.javafxapp;
 
+import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.regex.Pattern;
 
-
-public class RequestController {
+public class RequestController extends Application {
     @FXML
     private Button gatherDataButton;
     @FXML
@@ -78,8 +81,13 @@ public class RequestController {
                     String responseBody = response.body();
                     Platform.runLater(() -> responseCreationInvoice.setText(responseBody));
                     responseCreationInvoice.setVisible(true);
-
-
+                    try {
+                        File file = new File(".\\Backend\\FileStorage\\"+id+".pdf");
+                        HostServices hostServices = getHostServices();
+                        hostServices.showDocument(file.getAbsolutePath());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 } else {
                     System.err.println();
                     responseCreationInvoice.setText("HTTP Error: " + statusCode);
@@ -99,5 +107,10 @@ public class RequestController {
             responseCreationInvoice.setVisible(true);
 
         }
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
     }
 }
