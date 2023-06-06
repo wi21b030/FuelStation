@@ -105,7 +105,7 @@ public class Queue {
                 Connection connection = factory.newConnection();
                 Channel channel = connection.createChannel()
         ) {
-            System.out.println("Publishing" + customerData);
+            System.out.println("Publishing " + customerData);
             channel.queueDeclare(PRODUCE, false, false, false, null);
             channel.basicPublish("", PRODUCE, null, customerData.getBytes(StandardCharsets.UTF_8));
             System.out.println(" [" + this.id + "] sent '" + customerData + "' to PDFGenerator");
