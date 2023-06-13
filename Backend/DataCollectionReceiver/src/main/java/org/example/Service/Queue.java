@@ -100,44 +100,22 @@ public class Queue {
     }
 
     private void send(String customerData) throws IOException, TimeoutException {
-        System.out.println("Sending....");
+        //        System.out.println("Sending....");
         try (
                 Connection connection = factory.newConnection();
                 Channel channel = connection.createChannel()
         ) {
-            System.out.println("Publishing " + customerData);
+            //            System.out.println("Publishing " + customerData);
             channel.queueDeclare(PRODUCE, false, false, false, null);
             channel.basicPublish("", PRODUCE, null, customerData.getBytes(StandardCharsets.UTF_8));
             System.out.println(" [" + this.id + "] sent '" + customerData + "' to PDFGenerator");
         }
     }
 
-    private String extractIdFromMessage(String message) {
-        String[] keyValuePairs = message.split("&");
-        for (String keyValuePair : keyValuePairs) {
-            String[] parts = keyValuePair.split("=");
-            if (parts.length == 2 && parts[0].equals("id")) {
-                return parts[1];
-            }
-        }
-        return null;
-    }
-
-    private int extractTotalKWHFromCustomerData(String customerData) {
-        String[] keyValuePairs = customerData.split("&");
-        for (String keyValuePair : keyValuePairs) {
-            String[] parts = keyValuePair.split("=");
-            if (parts.length == 2 && parts[0].equals("totalKWH")) {
-                return Integer.parseInt(parts[1]);
-            }
-        }
-        return 0;
-    }
-
-    private String calculateTotal(List<String> receivedMessages) {
+    public String calculateTotal(List<String> receivedMessages) {
         float totalKWH = 0;
         String id = null;
-        System.out.println("receivedMessages " + receivedMessages);
+
         for (String message : receivedMessages) {
             String[] keyValuePairs = message.split("&");
             for (String keyValuePair : keyValuePairs) {
@@ -149,9 +127,9 @@ public class Queue {
                         id = value;
                     } else if (key.equals("kwh")) {
                         String cleanedValue = value.replaceAll(",", "."); // Remove commas
-                        System.out.println(cleanedValue);
+                        //System.out.println(cleanedValue);
                         totalKWH += Float.valueOf(cleanedValue);
-                        System.out.println(totalKWH);
+                        //System.out.println(totalKWH);
                     }
                 }
             }
