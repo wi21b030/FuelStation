@@ -52,7 +52,10 @@ public class Queue {
             } else {
                 System.out.println("Numbers not found.");
             }
-            PDFGenerator.generate(getKwh(), Database.select(getId()));
+            if(kwh != 0.0)
+                PDFGenerator.generate(getKwh(), Database.select(getId()));
+            else
+                System.out.println("Customer on this ID ("+id+") did not charge or does not exist yet!");
         };
 
         channel.basicConsume(CONSUME, true, deliverCallback, consumerTag -> {});

@@ -41,11 +41,7 @@ public class Queue {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             System.out.println(" [x] Received '" + message + "' " + LocalTime.now());
 
-            String[] parts = message.split("db_url=localhost:|&id=");
-            int port = Integer.parseInt(parts[1]);
-            this.id = Integer.parseInt(parts[2]);
-            Database db = new Database(port);
-            float kwh = db.select(id);
+            float kwh = getKWH(message);
             try {
                 send(kwh);
             } catch (TimeoutException e) {
@@ -67,5 +63,11 @@ public class Queue {
         }
     }
 
-
+    public float getKWH(String message) {
+        String[] parts = message.split("db_url=localhost:|&id=");
+        int port = Integer.parseInt(parts[1]);
+        this.id = Integer.parseInt(parts[2]);
+        Database db = new Database(port);
+        return db.select(id);
+    }
 }
