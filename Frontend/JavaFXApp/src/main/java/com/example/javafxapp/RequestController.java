@@ -111,6 +111,6 @@ public class RequestController extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
+        // muss wegen Application eingefügt sein
     }
 }

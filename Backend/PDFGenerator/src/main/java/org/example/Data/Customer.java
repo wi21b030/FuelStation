@@ -6,9 +6,9 @@ public class Customer {
     private static String lastName = null;
 
     public Customer(int id, String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        setId(id);
+        setFirstName(firstName);
+        setLastName(lastName);
     }
 
     public int getId() {
@@ -37,6 +37,6 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "User{" + "id='"+ id + "', firstName='" + firstName + "', lastName='" + lastName + "'}\n";
+        return "User{id='"+ id + "', firstName='" + firstName + "', lastName='" + lastName + "'}\n";
     }
 }
