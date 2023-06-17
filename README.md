@@ -15,7 +15,7 @@ as our version control system to host our repository (link to repository can be 
 
 This UML diagram visualises our system architecture:
 
-![UML-Diagramm](./SystemArchitectureUML.svg)
+![UML-Diagramm](./SystemArchitectureUML.png)
 
 ## Set-Up and Installation
 
