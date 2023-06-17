@@ -31,7 +31,7 @@ public class PDFGenerator {
         }
     }
 
-    public static void generate(float kwh, Customer customer) {
+    public static void generate(float kwh, Customer customer) { // guide https://www.youtube.com/watch?v=K6QBMh1oA-w
         System.out.println("Generating PDF...");
 
         PDDocument document = new PDDocument();
