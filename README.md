@@ -106,15 +106,16 @@ Here you can see a decision matrix on which components we tested and why we test
 
 In this table you can see the days we worked on and the hours we invested. Please consider that these numbers are rough estimates:
 
-| Date       | Activity                      | Hours Worked |
-|------------|-------------------------------|--------------|
-| 18.05.2023 | First Set-Up Meeting          | 9            |
-| 27.05.2023 | Work on DCD                   | 9            |
-| 28.05.2023 | DCD error fixed               | 7            |
-| 04.06.2023 | All other services            | 10           |
-| 06.06.2023 | PDF Generator finished        | 7            |
-| 13.06.2023 | Testing, error, restructuring | 8            |
-| **Total**  |                               | **50**       |
+| Date       | Activity                                  | Hours Worked |
+|------------|-------------------------------------------|--------------|
+| 18.05.2023 | First Set-Up Meeting                      | 9            |
+| 27.05.2023 | Work on DCD                               | 9            |
+| 28.05.2023 | DCD error fixed                           | 7            |
+| 04.06.2023 | All other services                        | 10           |
+| 06.06.2023 | PDF Generator finished                    | 7            |
+| 13.06.2023 | Testing, error, restructuring             | 8            |
+| 17.06.2023 | Final meeting for finishing documentation | 4            |
+| **Total**  |                                           | **54**       |
 
 
 
