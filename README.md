@@ -13,7 +13,9 @@ as our version control system to host our repository (link to repository can be 
 
 ## System Architecture
 
-UML diagram here: ![UML-Diagramm]()
+This UML diagram visualises our system architecture:
+
+![UML-Diagramm](./SystemArchitectureUML.svg)
 
 ## Set-Up and Installation
 
@@ -53,29 +55,28 @@ Throughout the development of this project, our team gained following key lesson
 
 1. **Effective collaboration with version control:** 
    Working as a team and making use of a version control tool like GitHub improved our collaboration and code management. 
-   It allowed us to work concurrently on different parts of the project, track changes, merge code seamlessly, and resolve conflicts efficiently.
+   It allowed us to work concurrently on different parts of the project, track changes, merge code and resolve conflicts.
 
 2. **Speed and ease of development environments with Docker:** 
-   Docker containers played a crucial role in making our development process faster and easier. 
-   By containerizing our databases and RabbitMQ instance, we ensured consistency across different team members' environments, 
-   eliminated compatibility issues, and made it easier to set up and manage the required services.
+   Docker containers played an important role in making our development process faster and easier. 
+   By containerizing our databases and RabbitMQ instance, we ensured consistency across different team members' environments.
 
 3. **Learning curve of new technologies:**
    As we incorporated new technologies like JavaFX, Spring Boot, and RabbitMQ into our project, 
-   we encountered a learning curve. However, through documentation, online resources, and collaborative problem-solving, 
-   we managed to obtain new skills and make use of them appropriately.
+   we encountered a learning curve. However, through documentation and online resources we managed to obtain 
+   new skills and make use of them appropriately.
+   For the usage of RabbitMQ it was important to have a clear understanding of how the messages are sent and received, and to agree on a pattern.
 
 4. **Clear communication and coordination:** 
    Effective communication and coordination among team members was essential for the success of the project. 
-   Regular meetings, clear task assignment, and ongoing updates ensured that everyone was on the same page and progress was made consistently.
+   Regular meetings, clear task assignment, and ongoing updates ensured that everyone was on the same page.
 
 5. **Understanding system architecture and component integration:** 
    Developing a distributed system required a clear understanding of the overall system architecture 
    and how different components interacted with each other. By carefully designing the system and 
-   establishing good integration between modules, we ensured a cohesive and functional application.
+   establishing good integration between modules, we ensured a functional application.
 
-6. **Error handling and troubleshooting:** 
-   Dealing with errors and unexpected issues is an inherent part of software development. 
+6. **Error handling and troubleshooting:**
    Throughout the project, we learned the importance of thorough error handling and debugging 
    to identify and resolve issues promptly.
 
@@ -104,18 +105,30 @@ Here you can see a decision matrix on which components we tested and why we test
 
 ## Tracked Time
 
-In this table you can see the days we worked on and the hours we invested. Please consider that these numbers are rough estimates:
+In this table you can see the days every team member worked on and the hours we invested individually. Please consider that these numbers are rough estimates:
 
-| Date       | Activity                                  | Hours Worked |
-|------------|-------------------------------------------|--------------|
-| 18.05.2023 | First Set-Up Meeting                      | 9            |
-| 27.05.2023 | Work on DCD                               | 9            |
-| 28.05.2023 | DCD error fixed                           | 7            |
-| 04.06.2023 | All other services                        | 10           |
-| 06.06.2023 | PDF Generator finished                    | 7            |
-| 13.06.2023 | Testing, error, restructuring             | 8            |
-| 17.06.2023 | Final meeting for finishing documentation | 4            |
-| **Total**  |                                           | **54**       |
+| Date       | Activity                                  | Hours Worked p.P. |
+|------------|-------------------------------------------|-------------------|
+| 18.05.2023 | First Set-Up Meeting                      | 9                 |
+| 27.05.2023 | Work on DCD                               | 9                 |
+| 28.05.2023 | DCD error fixed                           | 7                 |
+| 04.06.2023 | All other services                        | 8                 |
+| 06.06.2023 | PDF Generator finished                    | 7                 |
+| 13.06.2023 | Testing, error, restructuring             | 8                 |
+| 17.06.2023 | Final meeting for finishing documentation | 4                 |
+| **Total**  |                                           | **52**            |
+
+## Project Responsibilities
+
+This is how we split the workload, we tried to split it in a way so that every developer would at least work on one backend service:
+
+| Member  | Responsibilities                                                                      |
+|---------|---------------------------------------------------------------------------------------|
+| Heydari | JavaFX UI (automatic loading of PDF), DataCollectionDispatcher, PDFGenerator, Testing |
+| Xhunga  | JavaFX UI, StationDataCollector, PDFGenerator, UML Diagram                            |
+| Zullash | Project Organisation, SpringBoot API, DataCollectionReceiver, Documentation           |
+
+
 
 
 
