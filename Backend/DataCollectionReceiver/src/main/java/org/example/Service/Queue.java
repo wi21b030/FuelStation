@@ -10,8 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class Queue {
@@ -23,7 +21,6 @@ public class Queue {
     private final static int PORT = 30003;
     private int expectedCount;
     private int receivedCount = 0;
-    private CountDownLatch dataCollectionLatch;
 
     private static ConnectionFactory factory;
 
@@ -31,7 +28,6 @@ public class Queue {
         factory = new ConnectionFactory();
         factory.setHost(HOST);
         factory.setPort(PORT);
-        dataCollectionLatch = new CountDownLatch(1);
     }
 
     public void consumeExpectedMessages() throws IOException, TimeoutException {
@@ -39,6 +35,8 @@ public class Queue {
         Channel channel = connection.createChannel();
 
         channel.queueDeclare(CONSUME1, false, false, false, null);
+
+        System.out.println(" [*] Waiting for messages from DataCollectionDispatcher. To exit press CTRL+C");
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
@@ -59,26 +57,26 @@ public class Queue {
                     }
                 }
             }
+            System.out.println("expCount " + expectedCount);
 
-            dataCollectionLatch.countDown();
-            try {
-                consumeActualMessages();// Signal that data collection is complete
-            } catch (TimeoutException | InterruptedException e) {
+            /*try {
+                consumeActualMessages();
+            } catch (TimeoutException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
         };
 
         channel.basicConsume(CONSUME1, true, deliverCallback, consumerTag -> {
         });
     }
 
-    public void consumeActualMessages() throws IOException, TimeoutException, InterruptedException {
-        dataCollectionLatch.await(); // Wait for data collection to complete
-
+    public void consumeActualMessages() throws IOException, TimeoutException {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
         channel.queueDeclare(CONSUME2, false, false, false, null);
+
+        System.out.println(" [*] Waiting for messages from StationDataCollector. To exit press CTRL+C");
 
         List<String> receivedMessages = new ArrayList<>();
 
@@ -87,15 +85,15 @@ public class Queue {
             System.out.println(" [x] Received from StationDataCollector: '" + message + "' " + LocalTime.now());
             receivedMessages.add(message);
             receivedCount++;
-
+            // Check if the number of received messages from CONSUME2 matches the expected number
             if (expectedCount == receivedCount) {
                 System.out.println("got this " + receivedMessages);
                 try {
                     System.out.println("calculating " + receivedMessages);
                     String customerTotal = calculateTotal(receivedMessages);
-                    send(customerTotal);
+                    send(customerTotal, receivedCount);
+                    //channel.close();
                     receivedMessages.clear();
-                    receivedCount = 0;
                 } catch (TimeoutException e) {
                     throw new RuntimeException(e);
                 }
@@ -106,8 +104,10 @@ public class Queue {
         });
     }
 
-    private void send(String customerData) throws IOException, TimeoutException {
+    private void send(String customerData, int receivedCount) throws IOException, TimeoutException {
+        //        System.out.println("Sending....");
         try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
+            this.receivedCount = 0;
             System.out.println("Publishing " + customerData);
             channel.queueDeclare(PRODUCE, false, false, false, null);
             channel.basicPublish("", PRODUCE, null, customerData.getBytes(StandardCharsets.UTF_8));
@@ -129,8 +129,10 @@ public class Queue {
                     if (key.equals("id")) {
                         id = value;
                     } else if (key.equals("kwh")) {
-                        String cleanedValue = value.replaceAll(",", ".");
+                        String cleanedValue = value.replaceAll(",", "."); // Remove commas
+                        //System.out.println(cleanedValue);
                         totalKWH += Float.valueOf(cleanedValue);
+                        //System.out.println(totalKWH);
                     }
                 }
             }
@@ -139,7 +141,7 @@ public class Queue {
             System.out.println(totalKWH);
             return "id=" + id + "&totalKWH=" + totalKWH;
         }
-        return null;
+        return null; // or handle the case where id is not found
     }
-}
 
+}
