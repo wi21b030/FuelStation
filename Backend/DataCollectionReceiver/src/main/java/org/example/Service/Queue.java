@@ -42,7 +42,6 @@ public class Queue {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             System.out.println(" [x] Received from DataCollectionDispatcher: '" + message + "' " + LocalTime.now());
 
-            int customerID;
 
             String[] keyValuePairs = message.split("&");
             for (String keyValuePair : keyValuePairs) {
@@ -52,18 +51,10 @@ public class Queue {
                     String value = parts[1];
                     if (key.equals("count")) {
                         expectedCount = Integer.parseInt(value);
-                    } else if (key.equals("id")) {
-                        customerID = Integer.parseInt(value);
                     }
                 }
             }
             System.out.println("expCount " + expectedCount);
-
-            /*try {
-                consumeActualMessages();
-            } catch (TimeoutException e) {
-                throw new RuntimeException(e);
-            }*/
         };
 
         channel.basicConsume(CONSUME1, true, deliverCallback, consumerTag -> {
@@ -91,8 +82,8 @@ public class Queue {
                 try {
                     System.out.println("calculating " + receivedMessages);
                     String customerTotal = calculateTotal(receivedMessages);
-                    send(customerTotal, receivedCount);
-                    //channel.close();
+                    send(customerTotal);
+                    receivedCount = 0;
                     receivedMessages.clear();
                 } catch (TimeoutException e) {
                     throw new RuntimeException(e);
@@ -104,10 +95,8 @@ public class Queue {
         });
     }
 
-    private void send(String customerData, int receivedCount) throws IOException, TimeoutException {
-        //        System.out.println("Sending....");
+    private void send(String customerData) throws IOException, TimeoutException {
         try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
-            this.receivedCount = 0;
             System.out.println("Publishing " + customerData);
             channel.queueDeclare(PRODUCE, false, false, false, null);
             channel.basicPublish("", PRODUCE, null, customerData.getBytes(StandardCharsets.UTF_8));
@@ -130,9 +119,7 @@ public class Queue {
                         id = value;
                     } else if (key.equals("kwh")) {
                         String cleanedValue = value.replaceAll(",", "."); // Remove commas
-                        //System.out.println(cleanedValue);
                         totalKWH += Float.valueOf(cleanedValue);
-                        //System.out.println(totalKWH);
                     }
                 }
             }
@@ -141,7 +128,7 @@ public class Queue {
             System.out.println(totalKWH);
             return "id=" + id + "&totalKWH=" + totalKWH;
         }
-        return null; // or handle the case where id is not found
+        return null;
     }
 
 }
