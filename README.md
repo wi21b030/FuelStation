@@ -94,8 +94,8 @@ Here you can see a decision matrix on which components we tested and why we test
 | Component                | Reason for Testing                                                                                           |
 |--------------------------|--------------------------------------------------------------------------------------------------------------|
 | Java FX UI               | Not tested due to limited functionality, dependency on user interaction, and focus on backend functionality. |
-| SpringBoot API           | - Tested the `gatherData` endpoint to ensure proper handling of creating a data gathering request            |
-|                          | - Tested the `gatherInvoice` endpoint to ensure proper retrieval of invoices                                 |
+| SpringBoot API           | - Tested the `gatherData` method to ensure proper handling of creating a data gathering request              |
+|                          | - Tested the `gatherInvoice` method to ensure proper retrieval of invoices                                   |
 | DataCollectionDispatcher | - Tested the `getDatabase` method to verify the correct retrieval of station data                            |
 | StationDataCollector     | - Tested the `getKWH` method to check the retrieval of kWh data from the queue                               |
 | DataCollectionReceiver   | - Tested the `calculateTotal` method to verify the correct calculation of total kWh                          |
@@ -116,7 +116,8 @@ In this table you can see the days every team member worked on and the hours we 
 | 06.06.2023 | PDF Generator finished                    | 7                 |
 | 13.06.2023 | Testing, error, restructuring             | 8                 |
 | 17.06.2023 | Final meeting for finishing documentation | 4                 |
-| **Total**  |                                           | **52**            |
+| 18.06.2023 | DCR hotfix and documentation update       | 8                 |
+| **Total**  |                                           | **60**            |
 
 ## Project Responsibilities
 
@@ -126,7 +127,7 @@ This is how we split the workload, we tried to split it in a way so that every d
 |---------|---------------------------------------------------------------------------------------|
 | Heydari | JavaFX UI (automatic loading of PDF), DataCollectionDispatcher, PDFGenerator, Testing |
 | Xhunga  | JavaFX UI, StationDataCollector, PDFGenerator, UML Diagram                            |
-| Zullash | Project Organisation, SpringBoot API, DataCollectionReceiver, Documentation           |
+| Zullash | GitHub & Project Organisation, SpringBoot API, DataCollectionReceiver, Documentation  |
 
 
 
