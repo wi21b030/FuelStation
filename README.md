@@ -63,7 +63,7 @@ Throughout the development of this project, our team gained following key lesson
 
 3. **Learning curve of new technologies:**
    As we incorporated new technologies like JavaFX, Spring Boot, and RabbitMQ into our project, 
-   we encountered a learning curve. However, through documentation and online resources we managed to obtain 
+   we encountered a learning curve, but documentation and online resources helped us to obtain 
    new skills and make use of them appropriately.
    For the usage of RabbitMQ it was important to have a clear understanding of how the messages are sent and received, and to agree on a pattern.
 
@@ -73,8 +73,8 @@ Throughout the development of this project, our team gained following key lesson
 
 5. **Understanding system architecture and component integration:** 
    Developing a distributed system required a clear understanding of the overall system architecture 
-   and how different components interacted with each other. By carefully designing the system and 
-   establishing good integration between modules, we ensured a functional application.
+   and how different components interacted with each other. Therefore, it was important that every team member understood the
+   design decisions and the theory behind them. 
 
 6. **Error handling and troubleshooting:**
    Throughout the project, we learned the importance of thorough error handling and debugging 
